@@ -1,4 +1,4 @@
 # BlackJack
-Simple Blackjack card game coded with Python
+Simple text based Blackjack card game coded with Python
 
 Currently in development
