@@ -1,10 +1,11 @@
 import random
 
+
 class Player():
     def __init__(self,name):
         self.name = name
         self.hand = []
-        self.score = 0
+        self.score = 100
         self.bust = False
 
     def hit_or_stand(self):
@@ -21,7 +22,7 @@ class Player():
                     raise Exception
                 
             except Exception:
-                print("I did not understand that")
+                print("I did not understand that, try again!")
     
 
     def display_hand(self,Ihand,score):
@@ -47,18 +48,23 @@ class Deck():
 
 
     def shuffle(self):
+
+        random.shuffle(self.cards)
+
+        """
         self.new = self.cards
         random.shuffle(self.new)
         self.cards=self.new
         return self.cards
         ## self.cards=random.shuffle(self.cards) does not work as the shuffle function returns None
+        """
      
 
 
 class Gameplay():
     
-    def __init__(self):
-      self.p1=Player('Aaron')
+    def __init__(self,name):
+      self.p1=Player(name)
       self.dealer=Dealer()
       self.deck=Deck()
 
@@ -118,6 +124,11 @@ class Gameplay():
             if self.p1.hit_or_stand() == True:
                self.deal_card(self.p1.hand)
                self.p1.score= self.calculate(self.p1.hand)
+               if self.p1.score > 21:
+                   print(self.p1.display_hand(self.p1.hand,self.p1.score))
+                   print(self.p1.name,"went bust with a score of",self.p1.score)
+                   print()
+                   break
                print(self.p1.display_hand(self.p1.hand,self.p1.score))
                print()
             else:
@@ -133,25 +144,32 @@ class Gameplay():
         print()
         print("The dealer had a score of:",self.dealer.score)
         print()
-        """
-        Work in progress
-        
-        if self.p1.score> 21:
-            print(self.p1.name,"went bust with a score of",self.p1.score)
-        else:
-            if self.p1.score == 21:
-                print(self.p1.name,"has blackjack")
+        self.restart()
 
-        """
+    def restart(self):
+        self.p1.bust = False
+        self.dealer.bust = False
+        self.p1.hand = []
+        self.dealer.hand = []
+        
         
 
 
-        
-
-                       
+                    
 def main():
-    gameplay=Gameplay()
-    gameplay.play()
+    name = input("What is your name? ") 
+    gameplay=Gameplay(name)
+    keepPlaying = True
+
+    while keepPlaying:
+     gameplay.play()
+
+     ans = input("Play again? Y/N")
+     if ans.upper() == "Y":
+        gameplay.restart()
+     elif ans.upper() == "N":
+        keepPlaying = False
+        print("Thanks for playing!")
 
 if __name__=='__main__':
     main()
